@@ -1,26 +1,39 @@
+import numpy as np
+
 from backend.base import Backend
 
 try:
-    import cupy as cp
+    import cuda_native as _native
 except ImportError:
-    cp = None
+    _native = None
 
 
 class CudaBackend(Backend):
+    """GPU backend. Storage is `cuda_native.DeviceArray` -- a pool-allocated
+    buffer owned by the native extension's own CUDA streams/memory pool, not
+    `cupy.ndarray`. See native/cuda_native/README.md for build instructions
+    and which kernels are implemented vs. still TODO.
+    """
+
     name = "cuda"
 
     def __init__(self) -> None:
-        if cp is None:
-            raise RuntimeError("CuPy is required for CudaBackend")
+        if _native is None:
+            raise RuntimeError(
+                "cuda_native extension is not built. Run "
+                "`uv sync --group cuda-native` on a CUDA-capable machine "
+                "with a C++/CUDA toolchain installed (see "
+                "native/cuda_native/README.md)."
+            )
 
     def add(self, a, b):
-        raise NotImplementedError
+        return _native.add(a, b)
 
     def mul(self, a, b):
         raise NotImplementedError
 
     def matmul(self, a, b):
-        raise NotImplementedError
+        return _native.matmul_naive(a, b)
 
     def exp(self, a):
         raise NotImplementedError
@@ -35,7 +48,7 @@ class CudaBackend(Backend):
         raise NotImplementedError
 
     def relu(self, a):
-        raise NotImplementedError
+        return _native.relu_forward(a)
 
     def reshape(self, a, shape):
         raise NotImplementedError
@@ -50,7 +63,7 @@ class CudaBackend(Backend):
         raise NotImplementedError
 
     def zeros_like(self, a):
-        raise NotImplementedError
+        return _native.to_device(np.zeros(a.shape, dtype=np.float32))
 
     def to_numpy(self, a):
-        raise NotImplementedError
+        return _native.to_host(a)

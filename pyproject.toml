@@ -11,7 +11,14 @@ dependencies = ["numpy>=2.0"]
 
 [dependency-groups]
 dev = ["pytest>=8.0"]
-cuda = ["cupy-cuda12x>=13.0"]
+# Dev/test-only cross-check tool (e.g. comparing cuda_native kernel output
+# against cp.matmul, quick host<->device debugging). CudaBackend itself does
+# not depend on CuPy -- see native/cuda_native, which owns GPU memory itself.
+cuda-test = ["cupy-cuda12x>=13.0"]
+# Native pybind11/CUDA extension backing CudaBackend. Only needed on a
+# CUDA-capable machine with a C++ toolchain installed; everyone else can
+# ignore this group entirely. See native/cuda_native/README.md.
+cuda-native = ["cuda-native"]
 
 [project.scripts]
 proyecto-ia = "app:main"
@@ -32,3 +39,9 @@ packages = [
     "src/data",
     "src/testing",
 ]
+
+[tool.uv.workspace]
+members = ["native/cuda_native"]
+
+[tool.uv.sources]
+cuda-native = { workspace = true }

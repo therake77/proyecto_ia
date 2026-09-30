@@ -1,0 +1,18 @@
+[project]
+name = "cuda-native"
+version = "0.1.0"
+description = "Pybind11/CUDA extension: hand-written GPU kernels with C++-owned streams and memory pools"
+requires-python = ">=3.14"
+dependencies = []
+
+[build-system]
+requires = ["scikit-build-core>=0.10", "pybind11>=2.13"]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build]
+cmake.version = ">=3.24"
+cmake.build-type = "Release"
+wheel.packages = []
+
+[tool.scikit-build.cmake.define]
+CMAKE_CUDA_ARCHITECTURES = "native"

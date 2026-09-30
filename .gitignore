@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+wheelhouse/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# uv
+uv-cache/
+
+# pytest / coverage
+.pytest_cache/
+.cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# Type checkers / linters
+.mypy_cache/
+.ruff_cache/
+.pytype/
+
+# CMake / scikit-build-core / native extension build artifacts
+# (native/cuda_native builds into ephemeral temp dirs, but cover local
+# out-of-tree build dirs too, e.g. `cmake -B build`)
+build/
+build_*/
+_skbuild/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+CTestTestfile.cmake
+compile_commands.json
+*.ninja
+.ninja_log
+.ninja_deps
+
+# Compiled extension modules
+*.pyd
+*.so
+*.dll
+*.dylib
+*.obj
+*.o
+
+# IDEs / editors
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
